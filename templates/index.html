@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline Visualization</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+</head>
+<body>
+    <h1>Timeline Visualization</h1>
+    <form method="POST" action="/timeline">
+        <label for="event">Enter Event Topic:</label>
+        <input type="text" id="event" name="event" required>
+        <button type="submit">Show Timeline</button>
+    </form>
+
+    {% if events %}
+        <div id="visualization"></div>
+        <script>
+            // Create a DataSet with your timeline events
+            var items = new vis.DataSet([
+                {% for date, event in events %}
+                {id: {{ loop.index }}, content: '{{ event }}', start: '{{ date }}'},
+                {% endfor %}
+            ]);
+
+            // Configuration for the Timeline
+            var options = {};
+
+            // Create a Timeline
+            var container = document.getElementById('visualization');
+            var timeline = new vis.Timeline(container, items, options);
+        </script>
+    {% endif %}
+</body>
+</html>
